@@ -54,13 +54,22 @@ class Scene:
         return '\n'.join(self.strarray())
 
 class Line:
-    def __init__(self,start,end):
+    def __init__(self,start,end, thickness=None, color=None):
         self.start = start #xy tuple
         self.end = end     #xy tuple
+        self.thickness = thickness
+        self.color = color
 
     def strarray(self):
-        return ["  <line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n" %\
-                (self.start[0],self.start[1],self.end[0],self.end[1])]
+        if (self.thickness != None and self.color == None):
+            styletag = ' style="stroke-width:%d"' % int(self.thickness)
+        elif (self.thickness == None and self.color != None):
+            styletag = ' style="stroke:%s"' % self.color
+        elif (self.thickness != None and self.color != None):
+            styletag = ' style="stroke:%s; stroke-width:%d"' % (self.color,  int(self.thickness))
+
+        return ["  <line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" %s />\n" %\
+                (self.start[0],self.start[1],self.end[0],self.end[1], styletag)]
 
 
 class Circle:
